@@ -1,0 +1,52 @@
+# ===== Gradle =====
+# cache local do build; build/ e o output padrao deste projeto
+.gradle/
+**/build/
+!**/src/**/build/
+.gradle-task-name-cache
+gradle-app.setting
+
+# jars sao normalmente ignorados em projetos Java, MAS o wrapper precisa
+# estar no repo -- sem ele ninguem consegue buildar. A negacao precisa vir
+# DEPOIS de *.jar, senao e descartada.
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+
+# ===== Java =====
+*.class
+*.war
+hs_err_pid*
+replay_pid*
+
+# ===== Logs =====
+*.log
+logs/
+
+# ===== Segredos =====
+# a senha do banco pode vir por variavel de ambiente em vez do properties
+.env
+.env.*
+!.env.example
+src/main/resources/application-local.properties
+src/main/resources/application-local.yml
+
+# ===== IDE - JetBrains / IntelliJ =====
+.idea/
+*.iml
+*.iws
+out/
+
+# ===== IDE - Eclipse =====
+.classpath
+.project
+.settings/
+.factorypath
+
+# ===== IDE - VS Code =====
+.vscode/
+*.code-workspace
+
+# ===== Sistema operacional =====
+.DS_Store
+Thumbs.db
+desktop.ini

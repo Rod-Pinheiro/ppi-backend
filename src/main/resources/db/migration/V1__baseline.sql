@@ -1,0 +1,2 @@
+-- Baseline. Existe para inicializar o flyway_schema_history antes da primeira
+-- entity. As tabelas de dominio entram em V2, V3, ... conforme o modelo aparecer.
