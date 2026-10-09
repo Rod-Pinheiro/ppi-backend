@@ -1,0 +1,15 @@
+{
+  "name": "PPI - Banco de Sangue",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ],
+  "size": 0.0037746429443359375,
+  "filesCount": 22,
+  "presets": {
+    "requestType": "http",
+    "requestUrl": "http://localhost:8080"
+  },
+  "version": "1"
+}

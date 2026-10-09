@@ -1,0 +1,11 @@
+meta {
+  name: Marcar notificacao como lida
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/doadores/{{cpf}}/notificacoes/{{notificacaoId}}/ler
+  body: none
+  auth: none
+}

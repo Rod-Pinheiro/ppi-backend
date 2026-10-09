@@ -1,0 +1,11 @@
+meta {
+  name: Listar para registro
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/agendamentos/para-registro?cpf={{cpf}}
+  body: none
+  auth: none
+}

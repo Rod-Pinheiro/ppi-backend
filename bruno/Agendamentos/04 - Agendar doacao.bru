@@ -1,0 +1,19 @@
+meta {
+  name: Agendar doacao
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/api/agendamentos?cpf={{cpf}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "data": "2026-10-09",
+    "hora": "09:30",
+    "hemocentroId": "{{hemocentroId}}"
+  }
+}

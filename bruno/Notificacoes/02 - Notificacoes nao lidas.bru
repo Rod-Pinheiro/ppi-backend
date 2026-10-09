@@ -1,0 +1,11 @@
+meta {
+  name: Notificacoes nao lidas
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/doadores/{{cpf}}/notificacoes/nao-lidas
+  body: none
+  auth: none
+}

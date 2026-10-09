@@ -1,0 +1,16 @@
+meta {
+  name: Listar agendamentos
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/agendamentos?cpf={{cpf}}
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:8080
+  cpf: 11122233344 
+}

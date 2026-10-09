@@ -1,0 +1,17 @@
+meta {
+  name: Ajustar minima
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{baseUrl}}/api/estoque/{{estoqueId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "quantidadeMinima": 5
+  }
+}

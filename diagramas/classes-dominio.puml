@@ -1,0 +1,241 @@
+@startuml
+!pragma layout smetana
+skinparam packageStyle rectangle
+skinparam classAttributeIconSize 0
+skinparam arrowColor #333333
+skinparam packageBackgroundColor #f0f0f0
+skinparam packageBorderColor #666666
+skinparam backgroundColor white
+skinparam classFontStyle bold
+
+title Diagrama de Classes - Modelo de Dominio (Spring Boot + REST)
+
+' =======================
+' ENUMS
+' =======================
+package "model.enums" {
+  enum StatusAgendamento {
+    PENDENTE
+    CONFIRMADO
+    CANCELADO
+    REALIZADO
+    + getDescricao(): String
+  }
+
+  enum StatusBolsa {
+    DISPONIVEL
+    RESERVADA
+    UTILIZADA
+    VENCIDA
+    + getDescricao(): String
+  }
+
+  enum TipoSanguineo {
+    A
+    B
+    AB
+    O
+    + getValor(): String
+    + fromValor(String): TipoSanguineo
+  }
+
+  enum FatorRh {
+    POSITIVO
+    NEGATIVO
+    + getValor(): String
+    + fromValor(String): FatorRh
+  }
+}
+
+' =======================
+' MODEL - PESSOAS
+' =======================
+package "model" {
+
+  abstract class Pessoa <<@MappedSuperclass>> {
+    # nome: String
+    # email: String
+    + getNome(): String
+    + setNome(String)
+    + getEmail(): String
+    + setEmail(String)
+  }
+
+  class Doador {
+    - id: Long
+    - senha: String
+    - cpf: String
+    - tipoSanguineo: TipoSanguineo
+    - fatorRh: FatorRh
+    + getTipoCompleto(): String
+    + getCpf(): String
+  }
+
+  class NivelDoador <<regra pura>> {
+    + {static} LIMITE: int = 3
+    - registros: int
+    + percentual(): int
+    + isMaximo(): boolean
+  }
+
+  class CompatibilidadeSanguinea <<regra pura>> {
+    - {static} RECEPTORES_POR_DOADOR: Map
+    + {static} podeDoarPara(TipoSanguineo, TipoSanguineo): boolean
+    + {static} podeReceberDe(TipoSanguineo, TipoSanguineo): boolean
+    + {static} isDoadorUniversal(TipoSanguineo): boolean
+    + {static} isReceptorUniversal(TipoSanguineo): boolean
+  }
+
+  class PeriodoValidade <<regra pura>> {
+    + {static} DIAS: int = 42
+    - inicio: LocalDate
+    - fim: LocalDate
+    + isVencido(LocalDate): boolean
+    + diasRestantes(LocalDate): long
+    + getFim(): LocalDate
+  }
+}
+
+' =======================
+' MODEL - ENTIDADES
+' =======================
+package "model" {
+
+  class Hemocentro {
+    - id: String <<HEMO-001>>
+    - nome: String
+    - telefone: String
+    - email: String
+    - horarioAbertura: LocalTime
+    - horarioFechamento: LocalTime
+    - funcionamento24Horas: boolean
+    - capacidadeColeta: double
+    - endereco: Endereco
+    + getHorarioFuncionamento(): String
+  }
+
+  class Endereco {
+    - id: Long
+    - logradouro: String
+    - numero: String
+    - complemento: String
+    - bairro: String
+    - cidade: String
+    - estado: String
+    - cep: String
+    + getEnderecoCompleto(): String
+  }
+
+  class Agendamento {
+    - id: Long
+    - doador: Doador
+    - hemocentro: Hemocentro
+    - data: LocalDate
+    - hora: LocalTime
+    - status: StatusAgendamento
+    - dataConfirmacao: LocalDate
+    - observacoes: String
+    + confirmar()
+    + cancelar()
+    + marcarRealizado()
+    + isPendente(): boolean
+    + isRealizado(): boolean
+  }
+
+  class BolsaSangue {
+    + {static} DIAS_VALIDADE: int = 42
+    - id: Long
+    - codigo: String
+    - tipoSanguineo: TipoSanguineo
+    - fatorRh: FatorRh
+    - dataColeta: LocalDate
+    - dataValidade: LocalDate
+    - volumeMl: int
+    - quantidade: int
+    - status: StatusBolsa
+    - hemocentroOrigem: Hemocentro
+    - agendamento: Agendamento
+    + {static} fromAgendamento(Agendamento, TipoSanguineo, FatorRh, int, int): BolsaSangue
+    + getVolumeTotalMl(): int
+    + getTipoCompleto(): String
+  }
+
+  class EstoqueSangue {
+    - id: Long
+    - hemocentro: Hemocentro
+    - tipoSanguineo: TipoSanguineo
+    - fatorRh: FatorRh
+    - quantidadeDisponivel: int
+    - quantidadeMinima: int
+    + adicionar(int)
+    + baixar(int)
+    + isCritico(): boolean
+    + isDisponivel(): boolean
+  }
+
+  class TriagemDoador {
+    + {static} PESO_MINIMO_KG: double = 50.0
+    + {static} HEMOGLOBINA_MINIMA: double = 12.5
+    - id: Long
+    - doador: Doador
+    - data: LocalDate
+    - pesoKg: double
+    - pressaoArterial: String
+    - hemoglobina: double
+    - apto: boolean
+    - observacoes: String
+    + {static} isApto(double, double): boolean
+    + getMotivoInaptidao(): String
+  }
+
+  class Notificacao {
+    - id: Long
+    - doador: Doador
+    - titulo: String
+    - mensagem: String
+    - criadaEm: LocalDateTime
+    - lida: boolean
+    + marcarLida()
+    + isLida(): boolean
+  }
+}
+
+' =======================
+' HERANCA
+' =======================
+Pessoa <|-- Doador
+
+' =======================
+' COMPOSICAO / AGREGACAO
+' =======================
+Hemocentro *-- Endereco
+
+' =======================
+' ASSOCIACOES
+' =======================
+Doador --> "1" TipoSanguineo
+Doador --> "1" FatorRh
+Agendamento --> "1" Doador : agenda
+Agendamento --> "1" Hemocentro : acontece em
+Agendamento --> "1" StatusAgendamento
+BolsaSangue --> "1" Agendamento : origina-se de
+BolsaSangue --> "1" Hemocentro : coletada em
+BolsaSangue --> "1" TipoSanguineo
+BolsaSangue --> "1" FatorRh
+BolsaSangue --> "1" StatusBolsa
+EstoqueSangue --> "1" Hemocentro : armazenado em
+EstoqueSangue --> "1" TipoSanguineo
+EstoqueSangue --> "1" FatorRh
+TriagemDoador --> "1" Doador : avalia
+Notificacao --> "1" Doador : destinada a
+
+' =======================
+' DEPENDENCIAS DE REGRA
+' =======================
+Doador ..> CompatibilidadeSanguinea : usa
+Doador ..> NivelDoador : usa
+BolsaSangue ..> PeriodoValidade : usa
+EstoqueSangue ..> CompatibilidadeSanguinea : consulta
+TriagemDoador ..> NivelDoador : contribui
+
+@enduml

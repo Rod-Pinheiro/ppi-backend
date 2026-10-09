@@ -1,0 +1,11 @@
+meta {
+  name: Listar notificacoes
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/doadores/{{cpf}}/notificacoes
+  body: none
+  auth: none
+}

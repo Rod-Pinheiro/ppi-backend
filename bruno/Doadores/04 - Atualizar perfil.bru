@@ -1,0 +1,20 @@
+meta {
+  name: Atualizar perfil
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/api/doadores/{{cpf}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nome": "Teste E2E",
+    "email": "teste.e2e@unifaj.br",
+    "senhaAtual": "segredo1",
+    "novaSenha": "segredo1"
+  }
+}

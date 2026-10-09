@@ -1,0 +1,11 @@
+meta {
+  name: Historico de bolsas
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/bolsas-sangue?cpf={{cpf}}
+  body: none
+  auth: none
+}

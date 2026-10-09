@@ -1,0 +1,21 @@
+meta {
+  name: Registrar triagem
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/doadores/{{cpf}}/triagens
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "data": "2026-10-09",
+    "pesoKg": 70.5,
+    "pressaoArterial": "120/80",
+    "hemoglobina": 14.2,
+    "observacoes": "Triagem de rotina"
+  }
+}

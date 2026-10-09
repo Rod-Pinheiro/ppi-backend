@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Doação de Sangue — Web</title>
+	<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+	<header id="topbar" class="hidden">
+		<div class="brand"><span class="drop">●</span> Doação de Sangue</div>
+		<div class="user">
+			<span id="user-nome"></span>
+			<span id="badge-nao-lidas" class="badge hidden">0</span>
+			<button id="btn-sair" class="ghost">Sair</button>
+		</div>
+	</header>
+
+	<main id="login-view" class="auth">
+		<div class="card auth-card">
+			<h1>Doação de Sangue</h1>
+			<p class="muted">Entre ou cadastre-se para gerenciar doações.</p>
+			<div class="tabs">
+				<button class="tab active" data-auth="login">Entrar</button>
+				<button class="tab" data-auth="cadastro">Cadastrar</button>
+			</div>
+
+			<form id="form-login" class="auth-form">
+				<label>E-mail <input type="email" name="email" required></label>
+				<label>Senha <input type="password" name="senha" required></label>
+				<button type="submit" class="primary">Entrar</button>
+			</form>
+
+			<form id="form-cadastro" class="auth-form hidden">
+				<label>Nome <input name="nome" required></label>
+				<label>E-mail <input type="email" name="email" required></label>
+				<label>Senha <input type="password" name="senha" required minlength="6"></label>
+				<label>CPF <input name="cpf" required></label>
+				<label>Tipo sanguíneo
+					<select name="tipoSanguineo" required>
+						<option value="">Selecione</option>
+						<option>O+</option><option>O-</option>
+						<option>A+</option><option>A-</option>
+						<option>B+</option><option>B-</option>
+						<option>AB+</option><option>AB-</option>
+					</select>
+				</label>
+				<button type="submit" class="primary">Criar conta</button>
+			</form>
+			<div id="auth-erro" class="erro hidden"></div>
+		</div>
+	</main>
+
+	<div id="app-view" class="app hidden">
+		<nav class="sidebar">
+			<button class="nav active" data-page="home">Início</button>
+			<button class="nav" data-page="agendar">Agendar</button>
+			<button class="nav" data-page="agendamentos">Agendamentos</button>
+			<button class="nav" data-page="historico">Histórico</button>
+			<button class="nav" data-page="estoque">Estoque</button>
+			<button class="nav" data-page="triagem">Triagem</button>
+			<button class="nav" data-page="notificacoes">Notificações</button>
+			<button class="nav" data-page="perfil">Perfil</button>
+		</nav>
+		<section id="content" class="content"></section>
+	</div>
+
+	<div id="toast" class="toast hidden"></div>
+	<script src="app.js"></script>
+</body>
+</html>

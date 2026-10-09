@@ -1,0 +1,11 @@
+meta {
+  name: Buscar perfil
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/doadores/{{cpf}}
+  body: none
+  auth: none
+}

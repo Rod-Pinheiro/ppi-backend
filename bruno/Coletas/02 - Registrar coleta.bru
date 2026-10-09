@@ -1,0 +1,18 @@
+meta {
+  name: Registrar coleta
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/bolsas-sangue/agendamentos/{{agendamentoId}}/coletas?cpf={{cpf}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "volumeMl": 450,
+    "quantidade": 2
+  }
+}

@@ -1,0 +1,21 @@
+meta {
+  name: Cadastrar doador
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/doadores
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nome": "Teste E2E",
+    "email": "teste.e2e@unifaj.br",
+    "senha": "segredo1",
+    "cpf": "{{cpf}}",
+    "tipoSanguineo": "O+"
+  }
+}

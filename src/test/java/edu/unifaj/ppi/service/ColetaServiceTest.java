@@ -52,6 +52,12 @@ class ColetaServiceTest {
 	@Mock
 	private DoadorRepository doadorRepository;
 
+	@Mock
+	private EstoqueService estoqueService;
+
+	@Mock
+	private NotificacaoService notificacaoService;
+
 	private ColetaService coletaService;
 
 	private final Validador validador = new Validador();
@@ -62,8 +68,8 @@ class ColetaServiceTest {
 
 	@BeforeEach
 	void setUp() {
-		coletaService = new ColetaService(agendamentoRepository, bolsaSangueRepository, doadorRepository, validador,
-				validadorData);
+		coletaService = new ColetaService(agendamentoRepository, bolsaSangueRepository, doadorRepository,
+				estoqueService, notificacaoService, validador, validadorData);
 
 		doador = new Doador("João", "joao@email.com", "hash", CPF, TipoSanguineo.O, FatorRh.POSITIVO);
 		agendamento = new Agendamento(doador, hemocentro(), LocalDate.now().minusDays(1), LocalTime.of(8, 30));

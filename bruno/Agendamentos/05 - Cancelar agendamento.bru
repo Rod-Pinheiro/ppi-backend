@@ -1,0 +1,11 @@
+meta {
+  name: Cancelar agendamento
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/api/agendamentos/{{agendamentoId}}/cancelar?cpf={{cpf}}
+  body: none
+  auth: none
+}

@@ -33,7 +33,7 @@ import jakarta.persistence.Table;
 public class BolsaSangue {
 
 	/** Regra de validade do sangue doado: sempre 42 dias apos a coleta. */
-	public static final int DIAS_VALIDADE = 42;
+	public static final int DIAS_VALIDADE = PeriodoValidade.DIAS;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -108,7 +108,7 @@ public class BolsaSangue {
 		BolsaSangue bolsa = new BolsaSangue(gerarCodigo(), tipoSanguineo, fatorRh, dataColeta, volumeMl, quantidade);
 		bolsa.setHemocentroOrigem(agendamento.getHemocentro());
 		bolsa.setAgendamento(agendamento);
-		bolsa.setDataValidade(dataColeta.plusDays(DIAS_VALIDADE));
+		bolsa.setDataValidade(new PeriodoValidade(dataColeta).getFim());
 		bolsa.setStatus(StatusBolsa.DISPONIVEL);
 		return bolsa;
 	}

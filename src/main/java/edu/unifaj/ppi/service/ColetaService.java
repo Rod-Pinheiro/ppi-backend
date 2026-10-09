@@ -26,15 +26,20 @@ public class ColetaService {
 	private final AgendamentoRepository agendamentoRepository;
 	private final BolsaSangueRepository bolsaSangueRepository;
 	private final DoadorRepository doadorRepository;
+	private final EstoqueService estoqueService;
+	private final NotificacaoService notificacaoService;
 	private final Validador validador;
 	private final ValidadorData validadorData;
 
 	public ColetaService(AgendamentoRepository agendamentoRepository,
-			BolsaSangueRepository bolsaSangueRepository, DoadorRepository doadorRepository, Validador validador,
+			BolsaSangueRepository bolsaSangueRepository, DoadorRepository doadorRepository,
+			EstoqueService estoqueService, NotificacaoService notificacaoService, Validador validador,
 			ValidadorData validadorData) {
 		this.agendamentoRepository = agendamentoRepository;
 		this.bolsaSangueRepository = bolsaSangueRepository;
 		this.doadorRepository = doadorRepository;
+		this.estoqueService = estoqueService;
+		this.notificacaoService = notificacaoService;
 		this.validador = validador;
 		this.validadorData = validadorData;
 	}
@@ -78,8 +83,17 @@ public class ColetaService {
 		// doador, porque foi ele quem doou.
 		BolsaSangue bolsa = BolsaSangue.fromAgendamento(agendamento, doador.getTipoSanguineo(), doador.getFatorRh(),
 				request.volumeMl(), request.quantidade());
+		BolsaSangue salva = bolsaSangueRepository.save(bolsa);
 
-		return BolsaSangueResponse.from(bolsaSangueRepository.save(bolsa));
+		// Efeitos colaterais da coleta, na mesma transacao: o saldo do hemocentro
+		// sobe e o doador recebe o aviso. Se qualquer um falhar, a bolsa nao fica.
+		estoqueService.registrarEntrada(agendamento.getHemocentro(), doador.getTipoSanguineo(), doador.getFatorRh(),
+				request.quantidade());
+		notificacaoService.notificar(doador, "Coleta registrada",
+				"Sua doação gerou " + request.quantidade() + " bolsa(s) de " + doador.getTipoCompleto()
+						+ " em " + agendamento.getHemocentro().getNome() + ".");
+
+		return BolsaSangueResponse.from(salva);
 	}
 
 	@Transactional(readOnly = true)

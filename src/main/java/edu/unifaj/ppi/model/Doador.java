@@ -21,18 +21,12 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "doador")
-public class Doador {
+public class Doador extends Pessoa {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
-
-	@Column(name = "nome", nullable = false)
-	private String nome;
-
-	@Column(name = "email", nullable = false)
-	private String email;
 
 	@Column(name = "senha", nullable = false)
 	private String senha;
@@ -53,8 +47,7 @@ public class Doador {
 
 	public Doador(String nome, String email, String senha, String cpf, TipoSanguineo tipoSanguineo,
 			FatorRh fatorRh) {
-		this.nome = nome;
-		this.email = email;
+		super(nome, email);
 		this.senha = senha;
 		this.cpf = cpf;
 		this.tipoSanguineo = tipoSanguineo;
@@ -73,22 +66,6 @@ public class Doador {
 
 	public Long getId() {
 		return id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
 	}
 
 	public String getSenha() {

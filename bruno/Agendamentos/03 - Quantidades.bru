@@ -1,0 +1,11 @@
+meta {
+  name: Quantidades por agendamento
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/agendamentos/quantidades?cpf={{cpf}}
+  body: none
+  auth: none
+}
